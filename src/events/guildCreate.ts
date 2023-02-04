@@ -2,7 +2,6 @@ import { Routes } from 'discord.js';
 import { client } from '..';
 import Logger from '../utils/Logger';
 import { Event } from './../structures/Event';
-import DataBaseCheck from '../utils/DataBaseCheck';
 
 export default new Event('guildCreate', async (guild) => {
     Logger.info('New Guild : ' + guild.name, 'MESSAGE');
@@ -29,6 +28,4 @@ export default new Event('guildCreate', async (guild) => {
             e as Error
         );
     }
-
-    DataBaseCheck.checkDataBase(guild);
 });
