@@ -8,6 +8,7 @@
     "watch": "tsc -w",
     "start": "ts-node src/index.ts",
     "start:dev": "ts-node-dev src/index.ts --DEV",
+    "start:dev-prod": "ts-node-dev src/index.ts",
     "start:prod": "node dist/index.js"
   },
   "repository": {
