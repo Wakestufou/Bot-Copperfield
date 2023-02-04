@@ -6,8 +6,14 @@ export default new Command({
     description: 'Replies with Pong !',
     default_member_permissions: String(PermissionFlagsBits.Administrator),
     run: async ({ interaction }) => {
-        await interaction.deferReply();
-
-        await interaction.followUp({ content: 'Pong !' });
+        const sent = await interaction.reply({
+            content: 'Pinging...',
+            fetchReply: true,
+        });
+        await interaction.editReply(
+            `Roundtrip latency: ${
+                sent.createdTimestamp - interaction.createdTimestamp
+            }ms`
+        );
     },
 });

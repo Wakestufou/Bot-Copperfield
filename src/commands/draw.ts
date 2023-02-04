@@ -61,17 +61,32 @@ export default new Command({
         const subCommand = args.getSubcommand();
 
         if (subCommand === 'card') {
-            drawCards(interaction, args);
+            drawCards(interaction, args).catch((error) => {
+                console.error(
+                    'Error while replying to interaction for draw command (card): ',
+                    error
+                );
+            });
             return;
         }
 
         if (subCommand === 'dice') {
-            drawDice(interaction, args);
+            drawDice(interaction, args).catch((error) => {
+                console.error(
+                    'Error while replying to interaction for draw command (dice): ',
+                    error
+                );
+            });
             return;
         }
 
         if (subCommand === 'coin') {
-            drawCoin(interaction, args);
+            drawCoin(interaction, args).catch((error) => {
+                console.error(
+                    'Error while replying to interaction for draw command (coin): ',
+                    error
+                );
+            });
             return;
         }
     },

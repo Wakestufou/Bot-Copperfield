@@ -3,8 +3,9 @@ import {
     CommandInteractionOptionResolver,
 } from 'discord.js';
 import Logger from '../../utils/Logger';
+import wait from 'node:timers/promises';
 
-export default (
+export default async (
     interaction: CommandInteraction,
     args: CommandInteractionOptionResolver
 ) => {
@@ -80,7 +81,31 @@ export default (
 
         interaction
             .followUp({
-                content: `La carte tirée est la ${card}`,
+                content: `La carte tirée est :\n...`,
+            })
+            .then(async () => {
+                return wait.setTimeout(1000);
+            })
+            .then(() => {
+                return interaction.editReply({
+                    content: `La carte tirée est :\n...\n...`,
+                });
+            })
+            .then(async () => {
+                return wait.setTimeout(1000);
+            })
+            .then(() => {
+                return interaction.editReply({
+                    content: `La carte tirée est :\n...\n...\n...`,
+                });
+            })
+            .then(async () => {
+                return wait.setTimeout(1000);
+            })
+            .then(() => {
+                return interaction.editReply({
+                    content: `La carte tirée est : ${card}`,
+                });
             })
             .catch((error) => {
                 Logger.error(

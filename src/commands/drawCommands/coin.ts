@@ -4,7 +4,7 @@ import {
 } from 'discord.js';
 import Logger from '../../utils/Logger';
 
-export default (
+export default async (
     interaction: CommandInteraction,
     args: CommandInteractionOptionResolver
 ) => {
