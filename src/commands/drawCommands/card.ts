@@ -10,8 +10,9 @@ export default async (
     args: CommandInteractionOptionResolver
 ) => {
     const deck = args.getString('deck', true);
+    let cards = [] as string[];
     if (deck === '52') {
-        const cards = [
+        cards = [
             'Ac',
             '2c',
             '3c',
@@ -66,75 +67,91 @@ export default async (
             'Ks',
             'Joker',
         ];
-
-        let card = cards[Math.floor(Math.random() * cards.length)];
-
-        if (card[card.length - 1] === 'c') {
-            card = card.slice(0, -1) + '♣';
-        } else if (card[card.length - 1] === 'd') {
-            card = card.slice(0, -1) + '♦';
-        } else if (card[card.length - 1] === 'h') {
-            card = card.slice(0, -1) + '♥';
-        } else if (card[card.length - 1] === 's') {
-            card = card.slice(0, -1) + '♠';
-        }
-
-        interaction
-            .followUp({
-                content: `La carte tirée est :\n...`,
-            })
-            .then(async () => {
-                return wait.setTimeout(1000);
-            })
-            .then(() => {
-                return interaction.editReply({
-                    content: `La carte tirée est :\n...\n...`,
-                });
-            })
-            .then(async () => {
-                return wait.setTimeout(1000);
-            })
-            .then(() => {
-                return interaction.editReply({
-                    content: `La carte tirée est :\n...\n...\n...`,
-                });
-            })
-            .then(async () => {
-                return wait.setTimeout(1000);
-            })
-            .then(() => {
-                return interaction.editReply({
-                    content: `La carte tirée est : ${card}`,
-                });
-            })
-            .catch((error) => {
-                Logger.error(
-                    'Error while replying to interaction for draw command (52 cards): ',
-                    error
-                );
-            });
-
-        return;
     }
 
     if (deck === '32') {
-        const cards = ['A', '7', '8', '9', '10', 'J', 'Q', 'K'];
-        const color = ['♠', '♣', '♥', '♦'];
-
-        const card = cards[Math.floor(Math.random() * cards.length)];
-        const colorCard = color[Math.floor(Math.random() * color.length)];
-
-        interaction
-            .followUp({
-                content: `La carte tirée est le ${card}${colorCard}`,
-            })
-            .catch((error) => {
-                Logger.error(
-                    'Error while replying to interaction for draw command (32 cards): ',
-                    error
-                );
-            });
-
-        return;
+        cards = [
+            'Ac',
+            '7c',
+            '8c',
+            '9c',
+            '10c',
+            'Jc',
+            'Qc',
+            'Kc',
+            'Ad',
+            '7d',
+            '8d',
+            '9d',
+            '10d',
+            'Jd',
+            'Qd',
+            'Kd',
+            'Ah',
+            '7h',
+            '8h',
+            '9h',
+            '10h',
+            'Jh',
+            'Qh',
+            'Kh',
+            'As',
+            '7s',
+            '8s',
+            '9s',
+            '10s',
+            'Js',
+            'Qs',
+            'Ks',
+        ];
     }
+
+    let card = cards[Math.floor(Math.random() * cards.length)];
+
+    if (card[card.length - 1] === 'c') {
+        card = card.slice(0, -1) + '♣';
+    } else if (card[card.length - 1] === 'd') {
+        card = card.slice(0, -1) + '♦';
+    } else if (card[card.length - 1] === 'h') {
+        card = card.slice(0, -1) + '♥';
+    } else if (card[card.length - 1] === 's') {
+        card = card.slice(0, -1) + '♠';
+    }
+
+    interaction
+        .followUp({
+            content: `La carte tirée est :\n...`,
+        })
+        .then(async () => {
+            return wait.setTimeout(1000);
+        })
+        .then(() => {
+            return interaction.editReply({
+                content: `La carte tirée est :\n...\n...`,
+            });
+        })
+        .then(async () => {
+            return wait.setTimeout(1000);
+        })
+        .then(() => {
+            return interaction.editReply({
+                content: `La carte tirée est :\n...\n...\n...`,
+            });
+        })
+        .then(async () => {
+            return wait.setTimeout(1000);
+        })
+        .then(() => {
+            return interaction.editReply({
+                content: `La carte tirée est : ${card}`,
+            });
+        })
+        .catch((error) => {
+            Logger.error(
+                'Error while replying to interaction for draw command (52 cards): ',
+                error
+            );
+        });
+
+    return;
 };
