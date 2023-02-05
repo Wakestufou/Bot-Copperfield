@@ -4,6 +4,7 @@ import {
 } from 'discord.js';
 import Logger from '../../utils/Logger';
 import wait from 'node:timers/promises';
+import fs from 'node:fs';
 
 export default async (
     interaction: CommandInteraction,
@@ -108,6 +109,18 @@ export default async (
 
     let card = cards[Math.floor(Math.random() * cards.length)];
 
+    let cardImage: Buffer;
+
+    try {
+        cardImage = fs.readFileSync(
+            `${__dirname}/../../../assets/cards/${card}.png`
+        );
+    } catch (error) {
+        Logger.warn(
+            'Error while reading card image for draw command (52 cards): '
+        );
+    }
+
     if (card[card.length - 1] === 'c') {
         card = card.slice(0, -1) + '♣';
     } else if (card[card.length - 1] === 'd') {
@@ -142,8 +155,20 @@ export default async (
             return wait.setTimeout(1000);
         })
         .then(() => {
+            if (!cardImage) {
+                return interaction.editReply({
+                    content: `La carte tirée est : ${card}`,
+                });
+            }
+
             return interaction.editReply({
-                content: `La carte tirée est : ${card}`,
+                content: `La carte tirée est :`,
+                files: [
+                    {
+                        attachment: cardImage,
+                        name: `${card}.png`,
+                    },
+                ],
             });
         })
         .catch((error) => {
