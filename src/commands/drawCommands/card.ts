@@ -122,9 +122,9 @@ export default async (
     }
 
     if (card[card.length - 1] === 'c') {
-        card = card.slice(0, -1) + '♣';
-    } else if (card[card.length - 1] === 'd') {
         card = card.slice(0, -1) + '♦';
+    } else if (card[card.length - 1] === 'd') {
+        card = card.slice(0, -1) + '♣';
     } else if (card[card.length - 1] === 'h') {
         card = card.slice(0, -1) + '♥';
     } else if (card[card.length - 1] === 's') {
