@@ -1,9 +1,16 @@
 import {
+    APIAttachment,
+    Attachment,
+    AttachmentBuilder,
+    AttachmentPayload,
+    BufferResolvable,
     CommandInteraction,
     CommandInteractionOptionResolver,
+    JSONEncodable,
 } from 'discord.js';
 import Logger from '../../utils/Logger';
 import wait from 'node:timers/promises';
+import { Stream } from 'node:stream';
 
 export default async (
     interaction: CommandInteraction,
@@ -11,11 +18,11 @@ export default async (
 ) => {
     const number = args.getInteger('number') ?? 1;
 
-    if (number < 1 || number > 100) {
+    if (number < 1 || number > 10) {
         interaction
             .followUp({
                 content:
-                    '```css\n[ Le nombre de pièces doit être compris entre 1 et 100 ]```',
+                    '```css\n[ Le nombre de pièces doit être compris entre 1 et 10 ]```',
             })
             .catch((error) => {
                 Logger.error(
@@ -27,10 +34,23 @@ export default async (
         return;
     }
 
-    let result = '';
+    let results = '';
+    const coinFiles = [] as (
+        | BufferResolvable
+        | Stream
+        | JSONEncodable<APIAttachment>
+        | Attachment
+        | AttachmentBuilder
+        | AttachmentPayload
+    )[];
 
     for (let i = 0; i < number; i++) {
-        result += `${Math.floor(Math.random() * 2) === 0 ? 'Pile' : 'Face'} `;
+        const result = Math.floor(Math.random() * 2) === 0 ? 'Pile' : 'Face';
+        results += `${result} | `;
+        coinFiles.push({
+            attachment: `${__dirname}/../../../assets/coin/${result}.png`,
+            name: `${result}.png`,
+        });
     }
 
     interaction
@@ -56,7 +76,8 @@ export default async (
         })
         .then(() => {
             return interaction.editReply({
-                content: `Le résultat du tirage est : ${result}`,
+                content: `Le résultat du tirage est : ${results}`,
+                files: coinFiles,
             });
         })
         .catch((error) => {
