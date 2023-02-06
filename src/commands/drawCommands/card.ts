@@ -11,6 +11,9 @@ export default async (
     args: CommandInteractionOptionResolver
 ) => {
     const deck = args.getString('deck', true);
+
+    const all = args.getBoolean('all');
+
     let cards = [] as string[];
     if (deck === '52') {
         cards = [
@@ -105,6 +108,35 @@ export default async (
             'Qs',
             'Ks',
         ];
+    }
+
+    if (all) {
+        cards.forEach((element) => {
+            let cardString = element;
+            if (cardString[cardString.length - 1] === 'c') {
+                cardString = cardString.slice(0, -1) + '♦';
+            } else if (cardString[cardString.length - 1] === 'd') {
+                cardString = cardString.slice(0, -1) + '♣';
+            } else if (cardString[cardString.length - 1] === 'h') {
+                cardString = cardString.slice(0, -1) + '♥';
+            } else if (cardString[cardString.length - 1] === 's') {
+                cardString = cardString.slice(0, -1) + '♠';
+            }
+
+            if (interaction.channel === null) return;
+
+            interaction.channel.send({
+                content: `La carte tirée est : ${cardString}`,
+                files: [
+                    {
+                        attachment: `${__dirname}/../../../assets/cards/${element}.png`,
+                        name: `${element}.png`,
+                    },
+                ],
+            });
+        });
+
+        return;
     }
 
     let card = cards[Math.floor(Math.random() * cards.length)];
